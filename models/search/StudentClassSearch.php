@@ -2,13 +2,14 @@
 
 namespace app\models\search;
 
+use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Student;
+use app\models\StudentClass;
 
 /**
- * StudentSearch represents the model behind the search form of `app\models\Student`.
+ * StudentClassSearch represents the model behind the search form of `app\models\StudentClass`.
  */
-class StudentSearch extends Student
+class StudentClassSearch extends StudentClass
 {
     /**
      * {@inheritdoc}
@@ -16,9 +17,18 @@ class StudentSearch extends Student
     public function rules()
     {
         return [
-            [['id', 'class_id'], 'integer'],
-            [['last_name', 'first_name', 'patronymic'], 'string'],
+            [['id'], 'integer'],
+            [['name'], 'safe'],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
     }
 
     /**
@@ -30,7 +40,7 @@ class StudentSearch extends Student
      */
     public function search($params)
     {
-        $query = Student::find();
+        $query = StudentClass::find();
 
         // add conditions that should always apply here
 
@@ -49,12 +59,9 @@ class StudentSearch extends Student
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'class_id' => $this->class_id,
         ]);
 
-        $query->andFilterWhere(['like', 'last_name', $this->last_name])
-            ->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'patronymic', $this->patronymic]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

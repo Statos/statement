@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Lesson;
+use mdm\admin\components\Helper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -25,16 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'name',
             'fio_teacher',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Lesson $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'class' => ActionColumn::class,
+                'template' => Helper::filterActionColumn('{view}{update}{delete}'),
             ],
         ],
     ]); ?>

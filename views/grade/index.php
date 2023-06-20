@@ -1,6 +1,7 @@
 <?php
 
 use app\models\Grade;
+use mdm\admin\components\Helper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -18,14 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Добавить оценку', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Helper::checkRoute('/grade/create') ?
+            Html::a('Добавить оценку', ['create'], ['class' => 'btn btn-success']) : ''
+        ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
 
             //'id',
             [
@@ -44,10 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'quarter',
             'grade',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Grade $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                }
+                'class' => ActionColumn::class,
+                'template' => Helper::filterActionColumn('{view}{update}{delete}'),
             ],
         ],
     ]); ?>

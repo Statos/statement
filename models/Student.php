@@ -13,10 +13,11 @@ use yii\helpers\ArrayHelper;
  * @property string $last_name
  * @property string $first_name
  * @property string $patronymic
- * @property string $class
+ * @property int $class_id
  * @property-read string $fio
  *
  * @property Grade[] $grades
+ * @property StudentClass $studentClass
  */
 class Student extends \yii\db\ActiveRecord
 {
@@ -34,8 +35,10 @@ class Student extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['last_name', 'first_name', 'patronymic', 'class'], 'required'],
-            [['last_name', 'first_name', 'patronymic', 'class'], 'string', 'max' => 255],
+            [['last_name', 'first_name', 'patronymic', 'class_id'], 'required'],
+            [['last_name', 'first_name', 'patronymic'], 'string', 'max' => 255],
+            [['class_id'], 'integer'],
+            [['class_id'], 'exist', 'skipOnError' => true, 'targetClass' => StudentClass::class, 'targetAttribute' => ['class_id' => 'id']],
         ];
     }
 
@@ -50,7 +53,7 @@ class Student extends \yii\db\ActiveRecord
             'first_name' => 'Имя',
             'patronymic' => 'Отчество',
             'fio' => 'ФИО',
-            'class' => 'Класс',
+            'class_id' => 'Класс',
         ];
     }
 
@@ -62,6 +65,16 @@ class Student extends \yii\db\ActiveRecord
     public function getGrades()
     {
         return $this->hasMany(Grade::class, ['student_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[StudentClass]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStudentClass()
+    {
+        return $this->hasOne(StudentClass::class, ['id' => 'class_id']);
     }
 
     public function getFio()

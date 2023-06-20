@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'patronymic')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'class')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'class_id')->dropDownList(\app\models\StudentClass::getDropDown()) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
